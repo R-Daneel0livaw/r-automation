@@ -13,7 +13,7 @@ combine_files <- function(files) {
   header_row <- get_common_header(get_first(files))
   footer_row <- get_common_footer(get_first(files))
   detail_rows <- files %>% map_dfr(get_detail_rows)
-  updated_footer_row <- update_footer(footer_row, nrow(detail_rows))
+  updated_footer_row <- update_footer(footer_row, (nrow(detail_rows) + 2))
   detail_rows
 }
 
