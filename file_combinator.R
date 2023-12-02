@@ -14,6 +14,7 @@ combine_files <- function(files) {
   footer_row <- get_common_footer(get_first(files))
   detail_rows <- files %>% map_dfr(get_detail_rows)
   updated_footer_row <- update_footer(footer_row, nrow(detail_rows))
+  detail_rows
 }
 
 get_first <- function(files) {
@@ -40,7 +41,14 @@ get_common_footer <- function(file_name) {
 }
 
 update_footer <- function(footer, num_rows) {
-  
+  updated_footer <-
+    footer %>% mutate(V2 = str_pad(
+      as.character(num_rows),
+      width = 8,
+      side = "left",
+      pad = "0"
+    ))
+  updated_footer
 }
 
 trim_empty_cols <- function(df) {
