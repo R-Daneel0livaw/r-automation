@@ -18,3 +18,11 @@ all_data_df <-
     stringsAsFactors = FALSE,
     colClasses = c("character")
   )
+
+first_row_df <- all_data_df[1, , drop = FALSE]
+first_row_df <-  first_row_df %>%  select(-where(~any(str_length(.) < 1)))
+
+last_row_df <- all_data_df[nrow(all_data_df), , drop = FALSE]
+last_row_df <- last_row_df %>%  select(-where(~any(str_length(.) < 1)))
+
+detail_rows_df <- all_data_df[-c(1, nrow(all_data_df)), , drop = FALSE]
