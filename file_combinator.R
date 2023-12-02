@@ -14,7 +14,8 @@ combine_files <- function(files) {
   footer_row <- get_common_footer(get_first(files))
   detail_rows <- files %>% map_dfr(get_detail_rows)
   updated_footer_row <- update_footer(footer_row, (nrow(detail_rows) + 2))
-  detail_rows
+  res <- list(header = header_row, footer = updated_footer_row, detail_rows = detail_rows, file_name = get_first(files))
+  res
 }
 
 get_first <- function(files) {
@@ -71,36 +72,29 @@ read_file_df <- function(file_name) {
   file_df
 }
 
-combined_files <- files_list %>% map(combine_files)
+write_file_df <- function(combined_files) {
+  write_header(combined_files$header, combined_files$file_name)
+  write_append_row(combined_files$detail_rows, combined_files$file_name)
+  write_append_row(combined_files$footer, combined_files$file_name)
+}
 
-all_data_df <-
-  fread(
-    paste(source_dir, files_list[[1]][1], sep = "//"),
+write_header <- function(header_row, file_name) {
+  fwrite(
+    header_row,
+    paste(dest_dir, file_name, sep = "//"),
     sep = "|",
-    quote = "",
-    header = FALSE,
-    fill = TRUE,
-    stringsAsFactors = FALSE,
-    colClasses = c("character")
+    col.names = FALSE
   )
+}
 
-fwrite(
-  first_row_df,
-  paste(dest_dir, "oo.txt", sep = "//"),
-  sep = "|",
-  col.names = FALSE
-)
-fwrite(
-  detail_rows_df,
-  paste(dest_dir, "oo.txt", sep = "//"),
-  sep = "|",
-  append = TRUE
-)
-fwrite(
-  last_row_df,
-  paste(dest_dir, "oo.txt", sep = "//"),
-  sep = "|",
-  append = TRUE
-)
+write_append_row <- function(row, file_name) {
+  fwrite(
+    row,
+    paste(dest_dir, file_name, sep = "//"),
+    sep = "|",
+    append = TRUE
+  )
+}
 
-
+combined_files <- files_list %>% map(combine_files)
+combined_files %>% walk(write_file_df)
