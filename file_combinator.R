@@ -6,9 +6,6 @@ source_dir <- "C://Users//erich//RData//file_combination//input"
 dest_dir <- "C://Users//erich//RData//file_combination//output"
 max_files_per_combination <- 4
 
-files <- path_file(dir_ls(source_dir))
-files_list <- split(files, ceiling(seq_along(files) / max_files_per_combination))
-
 combine_files <- function(files) {
   header_row <- get_common_header(get_first(files))
   footer_row <- get_common_footer(get_first(files))
@@ -16,6 +13,11 @@ combine_files <- function(files) {
   updated_footer_row <- update_footer(footer_row, (nrow(detail_rows) + 2))
   res <- list(header = header_row, footer = updated_footer_row, detail_rows = detail_rows, file_name = get_first(files))
   res
+}
+
+get_files <- function() {
+  files <- path_file(dir_ls(source_dir))
+  files_list <- split(files, ceiling(seq_along(files) / max_files_per_combination))
 }
 
 get_first <- function(files) {
@@ -96,5 +98,5 @@ write_append_row <- function(row, file_name) {
   )
 }
 
-combined_files <- files_list %>% map(combine_files)
+combined_files <- get_files() %>% map(combine_files)
 combined_files %>% walk(write_file_df)
