@@ -20,9 +20,30 @@ all_data_df <-
   )
 
 first_row_df <- all_data_df[1, , drop = FALSE]
-first_row_df <-  first_row_df %>%  select(-where(~any(str_length(.) < 1)))
+first_row_df <-  first_row_df %>% select(-where(~any(str_length(.) < 1)))
 
 last_row_df <- all_data_df[nrow(all_data_df), , drop = FALSE]
-last_row_df <- last_row_df %>%  select(-where(~any(str_length(.) < 1)))
+last_row_df <- last_row_df %>% select(-where(~any(str_length(.) < 1)))
 
 detail_rows_df <- all_data_df[-c(1, nrow(all_data_df)), , drop = FALSE]
+
+fwrite(
+  first_row_df,
+  "C://Users//erich//RData//file_combination//output//oo.txt",
+  sep = "|",
+  col.names = FALSE
+)
+fwrite(
+  detail_rows_df,
+  "C://Users//erich//RData//file_combination//output//oo.txt",
+  sep = "|",
+  append = TRUE
+)
+fwrite(
+  last_row_df,
+  "C://Users//erich//RData//file_combination//output//oo.txt",
+  sep = "|",
+  append = TRUE
+)
+
+
