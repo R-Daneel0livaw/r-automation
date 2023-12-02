@@ -2,7 +2,8 @@ library(tidyverse)
 library(data.table)
 library(fs)
 
-source_dir <- "C://Users//erich//RData//file_combination"
+source_dir <- "C://Users//erich//RData//file_combination//input"
+dest_dir <- "C://Users//erich//RData//file_combination//output"
 max_files_per_combination <- 4
 
 files <- path_file(dir_ls(source_dir))
@@ -29,19 +30,19 @@ detail_rows_df <- all_data_df[-c(1, nrow(all_data_df)), , drop = FALSE]
 
 fwrite(
   first_row_df,
-  "C://Users//erich//RData//file_combination//output//oo.txt",
+  paste(dest_dir, "oo.txt", sep = "//"),
   sep = "|",
   col.names = FALSE
 )
 fwrite(
   detail_rows_df,
-  "C://Users//erich//RData//file_combination//output//oo.txt",
+  paste(dest_dir, "oo.txt", sep = "//"),
   sep = "|",
   append = TRUE
 )
 fwrite(
   last_row_df,
-  "C://Users//erich//RData//file_combination//output//oo.txt",
+  paste(dest_dir, "oo.txt", sep = "//"),
   sep = "|",
   append = TRUE
 )
