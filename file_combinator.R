@@ -10,17 +10,21 @@ files <- path_file(dir_ls(source_dir))
 files_list <- split(files, ceiling(seq_along(files) / max_files_per_combination))
 
 combine_files <- function(files) {
-  header_row <- get_common_header(files[[1]][1])
-  print(header_row)
-  footer_row <- get_common_footer(files[[1]][1])
-  print(footer_row)
+  header_row <- get_common_header(get_first(files))
+  footer_row <- get_common_footer(get_first(files))
   detail_rows <- files %>% map_dfr(get_detail_rows)
+  updated_footer_row <- update_footer(footer_row, nrow(detail_rows))
+}
+
+get_first <- function(files) {
+  first_file <- files[[1]][1]
+  first_file
 }
 
 get_detail_rows <- function(file_name) {
   all_data_df <- read_file_df(file_name)
-    
   detail_rows <- all_data_df %>% slice(2:(n()-1))
+  detail_rows
 }
 
 get_common_header <- function(file_name) {
@@ -33,6 +37,10 @@ get_common_footer <- function(file_name) {
   footer_df <- read_file_df(file_name)
   footer <- footer_df %>% slice(n()) %>% trim_empty_cols()
   footer
+}
+
+update_footer <- function(footer, num_rows) {
+  
 }
 
 trim_empty_cols <- function(df) {
