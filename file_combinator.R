@@ -18,6 +18,7 @@ combine_files <- function(files) {
 get_files <- function() {
   files <- path_file(dir_ls(source_dir))
   files_list <- split(files, ceiling(seq_along(files) / max_files_per_combination))
+  files_list
 }
 
 get_first <- function(files) {
