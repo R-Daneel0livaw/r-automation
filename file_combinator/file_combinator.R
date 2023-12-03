@@ -16,7 +16,7 @@ combine_files <- function(files) {
 }
 
 get_files <- function() {
-  files <- path_file(dir_ls(source_dir))
+  files <- path_file(dir_ls(source_dir, regexp = "\\.txt$"))
   files_list <- split(files, ceiling(seq_along(files) / max_files_per_combination))
   files_list
 }
@@ -71,7 +71,6 @@ read_file_df <- function(file_name) {
       stringsAsFactors = FALSE,
       colClasses = c("character")
     )
-  
   file_df
 }
 
@@ -86,6 +85,7 @@ write_header <- function(header_row, file_name) {
     header_row,
     paste(dest_dir, file_name, sep = "//"),
     sep = "|",
+    quote = FALSE,
     col.names = FALSE
   )
 }
@@ -95,6 +95,7 @@ write_append_row <- function(row, file_name) {
     row,
     paste(dest_dir, file_name, sep = "//"),
     sep = "|",
+    quote = FALSE,
     append = TRUE
   )
 }
